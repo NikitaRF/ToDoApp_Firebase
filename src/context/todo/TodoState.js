@@ -26,17 +26,27 @@ export const TodoState = ({ children }) => {
   const hideLoader = () => dispatch({type: HIDE_LOADER})
   const showError = (error) => ({type: SHOW_ERROR, error})
   const clearError = () => ({type: CLEAR_ERROR})
+
   const fetchTodos = async () => {
-      const response = await fetch('https://todoapp-aa2ea-default-rtdb.europe-west1.firebasedatabase.app/todos.json', {
-          method: 'GET',
-          headers: {'Content-Type': 'application/json'},
-      })
-      const data = await response.json()
-      console.log(data)
-      const todos = Object.keys(data).map((key) => {
-          return {...data[key], id: key}
-      })
-      dispatch({type: FETCH_TODOS, todos})
+      showLoader()
+      clearError()
+      try {
+          const response = await fetch('https://todoapp-aa2ea-default-rtdb.europe-west1.firebasedatabase.app/todos.j1son', {
+              method: 'GET',
+              headers: {'Content-Type': 'application/json'},
+          })
+          const data = await response.json()
+          const todos = Object.keys(data).map((key) => {
+              return {...data[key], id: key}
+          })
+          dispatch({type: FETCH_TODOS, todos})
+      } catch (e) {
+          showError('Что-то пошло не так...')
+          console.log(e)
+      } finally {
+          hideLoader()
+
+      }
   }
 
 
@@ -51,8 +61,6 @@ export const TodoState = ({ children }) => {
           body: JSON.stringify({title})
       })
       const data = await response.json()
-      console.log(data)
-
       dispatch({ type: ADD_TODO, title, id: data.name })
   }
 
@@ -90,7 +98,8 @@ export const TodoState = ({ children }) => {
           addTodo,
           removeTodo,
           updateTodo,
-          fetchTodos
+          fetchTodos,
+
       }}
     >
       {children}

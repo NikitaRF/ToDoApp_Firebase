@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
-import { StyleSheet, View, FlatList, Image, Dimensions, Text } from 'react-native'
+import { StyleSheet, View, FlatList, Image, Dimensions } from 'react-native'
 import { AddTodo } from '../components/AddTodo'
 import { Todo } from '../components/Todo'
 import { THEME } from '../theme'
 import {TodoContext} from "../context/todo/todoContext";
 import {ScreenContext} from "../context/screen/screenContext";
+import {AppLoader} from "../components/ui/AppLoader";
+import {AppText} from "../components/ui/AppText";
 
 export const MainScreen = () => {
   const {addTodo, todos, removeTodo, fetchTodos, loading, error} = useContext(TodoContext)
@@ -33,6 +35,18 @@ export const MainScreen = () => {
       Dimensions.removeEventListener('change', update)
     }
   })
+
+  if (loading) {
+    return <AppLoader />
+  }
+
+  if (error) {
+    return (
+        <View style={styles.center}>
+          <AppText style={styles.error}>{error}</AppText>
+        </View>
+    )
+  }
 
   let content = (
     <View style={{ width: deviceWidth }}>
@@ -78,5 +92,14 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'contain'
+  },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  error: {
+    fontSize: 20,
+    color: THEME.DANGER_COLOR,
   }
 })
