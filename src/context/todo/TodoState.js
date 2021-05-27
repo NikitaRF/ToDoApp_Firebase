@@ -26,6 +26,24 @@ export const TodoState = ({ children }) => {
   const hideLoader = () => dispatch({type: HIDE_LOADER})
   const showError = (error) => dispatch({type: SHOW_ERROR, error})
   const clearError = () => dispatch({type: CLEAR_ERROR})
+  const updateTodo = async (id, title) => {
+      showLoader()
+      clearError()
+      try {
+          await fetch(`https://todoapp-aa2ea-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`,{
+              method: 'PATCH',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({title})
+          } )
+          dispatch({type: UPDATE_TODO, id, title})
+      } catch (e) {
+          showError('Что-то пошло не так...')
+          console.log(e)
+      } finally {
+          hideLoader()
+      }
+  }
+
 
   const fetchTodos = async () => {
       showLoader()
@@ -77,8 +95,13 @@ export const TodoState = ({ children }) => {
                 {
                   text: 'Удалить',
                   style: 'destructive',
-                  onPress: () => {
+                  onPress: async () => {
                       changeScreen(null)
+                      await fetch(`https://todoapp-aa2ea-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`, {
+                          method: 'DELETE',
+                          headers: {'Content-Type': 'application/json'},
+
+                      })
                       dispatch({ type: REMOVE_TODO, id })
                   }
                 }
@@ -87,7 +110,6 @@ export const TodoState = ({ children }) => {
             )
   }
 
-  const updateTodo = (id, title) => dispatch({ type: UPDATE_TODO, id, title })
 
   return (
     <TodoContext.Provider
