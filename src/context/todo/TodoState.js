@@ -24,14 +24,14 @@ export const TodoState = ({ children }) => {
 
   const showLoader = () => dispatch({type: SHOW_LOADER})
   const hideLoader = () => dispatch({type: HIDE_LOADER})
-  const showError = (error) => ({type: SHOW_ERROR, error})
-  const clearError = () => ({type: CLEAR_ERROR})
+  const showError = (error) => dispatch({type: SHOW_ERROR, error})
+  const clearError = () => dispatch({type: CLEAR_ERROR})
 
   const fetchTodos = async () => {
       showLoader()
       clearError()
       try {
-          const response = await fetch('https://todoapp-aa2ea-default-rtdb.europe-west1.firebasedatabase.app/todos.j1son', {
+          const response = await fetch('https://todoapp-aa2ea-default-rtdb.europe-west1.firebasedatabase.app/todos.json', {
               method: 'GET',
               headers: {'Content-Type': 'application/json'},
           })
