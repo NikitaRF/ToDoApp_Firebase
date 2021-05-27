@@ -13,6 +13,7 @@ import {
     UPDATE_TODO
 } from '../types'
 import {ScreenContext} from "../screen/screenContext";
+import {Http} from "../../http";
 
 
 export const TodoState = ({ children }) => {
@@ -73,13 +74,19 @@ export const TodoState = ({ children }) => {
   const [state, dispatch] = useReducer(todoReducer, initialState)
 
   const addTodo = async title => {
-      const response = await fetch('https://todoapp-aa2ea-default-rtdb.europe-west1.firebasedatabase.app/todos.json', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({title})
-      })
-      const data = await response.json()
-      dispatch({ type: ADD_TODO, title, id: data.name })
+      // const response = await fetch('https://todoapp-aa2ea-default-rtdb.europe-west1.firebasedatabase.app/todos.json', {
+      //     method: 'POST',
+      //     headers: {'Content-Type': 'application/json'},
+      //     body: JSON.stringify({title})
+      // })
+      clearError()
+      try {
+          const data = await Http.post('https://todoapp-aa2ea-default-rtdb.europe-west1.firebasedatabase.app/todos.json', {title})
+          dispatch({ type: ADD_TODO, title, id: data.name })
+      } catch (e) {
+          showError("Что-то пошло не так...")
+      }
+
   }
 
   const removeTodo = id => {
