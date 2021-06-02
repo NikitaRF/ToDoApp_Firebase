@@ -8,11 +8,13 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@expo/ngrok": "^2.4.3",
     "@expo/vector-icons": "^12.0.0",
     "expo": "^41.0.0",
     "expo-app-loading": "^1.0.3",
     "expo-font": "~9.1.0",
     "expo-updates": "~0.5.4",
+    "ngrok": "^4.0.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
