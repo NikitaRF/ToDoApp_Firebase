@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width > 400 ? 150 : 100
   },
   title: {
-    fontSize: 20
+    fontSize: 20,
+    width: '70%',
   }
 })
